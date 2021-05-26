@@ -40,12 +40,19 @@ class IniciarSesionActivity : AppCompatActivity() {
                     Toast.makeText(this, "Correcto", Toast.LENGTH_LONG).show()
 
                     // Guarda el ID del usuario en su memoria local
-                    val shared = getSharedPreferences("datos-paciente", MODE_PRIVATE)
+                    val shared = getSharedPreferences("datos-paciente", MODE_PRIVATE) ?:
+                        return@addOnCompleteListener
 
                     with(shared.edit()){
                         putString("id", usuarioID)
                         commit()
                     }
+
+                    // Nos dirigimos al menú principal
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                    finish()
                 }
 
                 else {

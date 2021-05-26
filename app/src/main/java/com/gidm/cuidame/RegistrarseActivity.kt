@@ -1,5 +1,6 @@
 package com.gidm.cuidame
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -65,11 +66,18 @@ class RegistrarseActivity : AppCompatActivity() {
 
                                 // Guarda el ID del usuario en su memoria local
                                 val shared = getSharedPreferences("datos-paciente", MODE_PRIVATE)
+                                    ?: return@addOnCompleteListener
 
                                 with(shared.edit()){
                                     putString("id", usuarioID)
                                     commit()
                                 }
+
+                                // Nos dirigimos al menú principal
+                                val intent = Intent(this, MainActivity::class.java)
+                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                startActivity(intent)
+                                finish()
                             }
                         }
                     }
