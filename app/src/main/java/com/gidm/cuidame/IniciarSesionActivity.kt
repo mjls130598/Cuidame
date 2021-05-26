@@ -37,7 +37,6 @@ class IniciarSesionActivity : AppCompatActivity() {
 
                     // Obtenemos el ID del usuario
                     val usuarioID = auth.currentUser!!.uid
-                    Toast.makeText(this, "Correcto", Toast.LENGTH_LONG).show()
 
                     // Guarda el ID del usuario en su memoria local
                     val shared = getSharedPreferences("datos-paciente", MODE_PRIVATE) ?:

@@ -54,7 +54,6 @@ class RegistrarseActivity : AppCompatActivity() {
 
                         // El ID del usuario creado y su nombre
                         val campos = HashMap<String, String>()
-                        campos["id"] = usuarioID
                         campos["nombre"] = nombre
 
                         // Se guarda los datos anteriores
@@ -62,7 +61,6 @@ class RegistrarseActivity : AppCompatActivity() {
 
                             // Si todo ha salido correctamente, ...
                             if (it2.isSuccessful){
-                                Toast.makeText(this, "Correcto", Toast.LENGTH_LONG).show()
 
                                 // Guarda el ID del usuario en su memoria local
                                 val shared = getSharedPreferences("datos-paciente", MODE_PRIVATE)
