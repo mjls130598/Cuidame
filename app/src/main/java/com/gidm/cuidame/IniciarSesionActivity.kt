@@ -5,11 +5,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
 
 class IniciarSesionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_iniciar_sesion)
+
+        // Creamos instancia con la base de datos encargada de las autorizaciones
+        val auth = FirebaseAuth.getInstance()
 
         // Elementos de la pantalla
         val inputEmail = findViewById<EditText>(R.id.inputEmail)
@@ -24,7 +29,29 @@ class IniciarSesionActivity : AppCompatActivity() {
             val email = inputEmail.text.toString()
             val contrasenia = inputContrasenia.text.toString()
 
+            // Inicia sesión dentro de la autenticación
+            auth.signInWithEmailAndPassword(email, contrasenia).addOnCompleteListener {
 
+                // Si se ha iniciado sesión correctamente, ...
+                if(it.isSuccessful){
+
+                    // Obtenemos el ID del usuario
+                    val usuarioID = auth.currentUser!!.uid
+                    Toast.makeText(this, "Correcto", Toast.LENGTH_LONG).show()
+
+                    // Guarda el ID del usuario en su memoria local
+                    val shared = getSharedPreferences("datos-paciente", MODE_PRIVATE)
+
+                    with(shared.edit()){
+                        putString("id", usuarioID)
+                        commit()
+                    }
+                }
+
+                else {
+                    Toast.makeText(this, "Email y/o contraseña incorrectos", Toast.LENGTH_LONG).show()
+                }
+            }
         }
 
         // Si le da al botón "Registrarse", ...
