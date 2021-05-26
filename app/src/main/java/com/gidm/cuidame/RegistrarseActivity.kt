@@ -30,6 +30,7 @@ class RegistrarseActivity : AppCompatActivity() {
         // Si se pulsa sobre "Guardar", ...
         guardar.setOnClickListener{
 
+            // Recoge los datos de los elementos de la pantalla
             val nombre = nombreInput.text.toString()
             val correo = correoInput.text.toString()
             val contrasenia = contraseniaInput.text.toString()
@@ -43,6 +44,8 @@ class RegistrarseActivity : AppCompatActivity() {
 
                      // Si se ha relizado correctamente, ...
                     if (it.isSuccessful){
+
+                        // Obtenemos el ID del usuario
                         val usuarioID = auth.currentUser!!.uid
 
                         // Guardamos dentro de "Usuarios" en la BD
@@ -59,6 +62,8 @@ class RegistrarseActivity : AppCompatActivity() {
                             // Si todo ha salido correctamente, ...
                             if (it2.isSuccessful){
                                 Toast.makeText(this, "Correcto", Toast.LENGTH_LONG).show()
+
+                                // Guarda el ID del usuario en su memoria local
                                 val shared = getSharedPreferences("datos-paciente", MODE_PRIVATE)
 
                                 with(shared.edit()){

@@ -52,7 +52,7 @@
             android:layout_height="24dp" />
 
         <Button
-            android:id="@+id/inicar_sesion"
+            android:id="@+id/iniciar_sesion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="8dp"
