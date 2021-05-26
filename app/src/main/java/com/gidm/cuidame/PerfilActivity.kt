@@ -1,6 +1,8 @@
 package com.gidm.cuidame
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -18,6 +20,8 @@ class PerfilActivity : AppCompatActivity() {
         // Recogemos los elementos de la pantalla
         val nombre = findViewById<TextView>(R.id.nombre)
         val email = findViewById<TextView>(R.id.email)
+        val editar = findViewById<Button>(R.id.editar)
+        val borrar = findViewById<Button>(R.id.borrar)
 
         // Obtenemos el id del usuario
         val shared = getSharedPreferences("datos-paciente", MODE_PRIVATE)
@@ -26,16 +30,14 @@ class PerfilActivity : AppCompatActivity() {
         // Creamos instancia con la base de datos encargada de las autorizaciones
         val auth = FirebaseAuth.getInstance()
 
-
         if (id != null){
-
             val usuario = auth.currentUser
 
             // Accedemos a los datos del usuario
             val datosUsuario = FirebaseDatabase.getInstance().
             getReference("Usuarios").child(id).child("nombre")
 
-
+            // Los mostramos por pantalla
             if(usuario != null){
                 datosUsuario.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -46,6 +48,12 @@ class PerfilActivity : AppCompatActivity() {
                 })
                 email.text = usuario.email
             }
+        }
+
+        // Si se clickea sobre "Editar cuenta", ...
+        editar.setOnClickListener{
+            val intent = Intent(this, EditarActivity::class.java)
+            startActivity(intent)
         }
     }
 }
