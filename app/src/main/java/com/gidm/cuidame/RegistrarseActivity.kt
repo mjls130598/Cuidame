@@ -4,12 +4,21 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 class RegistrarseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_datos_usuario)
+
+        // Creamos instancia con la base de datos encargada de las autorizaciones
+        val auth = FirebaseAuth.getInstance()
+
+        // Creamos instancia con la base de datos
+        val db = FirebaseDatabase.getInstance()
 
         // Obtenemos los elementos de la vista
         val nombreInput = findViewById<EditText>(R.id.inputNombre)
@@ -28,6 +37,42 @@ class RegistrarseActivity : AppCompatActivity() {
 
             // Si los datos introducidos son correctos, ...
             if(Utils.comprobarUsuario(nombre, correo, contrasenia, contraseniaRep, this)){
+
+                // Creamos la autenticación del nuevo usuario en la BD
+                auth.createUserWithEmailAndPassword(correo, contrasenia).addOnCompleteListener{
+
+                     // Si se ha relizado correctamente, ...
+                    if (it.isSuccessful){
+                        val usuarioID = auth.currentUser!!.uid
+
+                        // Guardamos dentro de "Usuarios" en la BD
+                        val referencia = db.getReference("Usuarios").child(usuarioID)
+
+                        // El ID del usuario creado y su nombre
+                        val campos = HashMap<String, String>()
+                        campos["id"] = usuarioID
+                        campos["nombre"] = nombre
+
+                        // Se guarda los datos anteriores
+                        referencia.setValue(campos).addOnCompleteListener{ it2 ->
+
+                            // Si todo ha salido correctamente, ...
+                            if (it2.isSuccessful){
+                                Toast.makeText(this, "Correcto", Toast.LENGTH_LONG).show()
+                                val shared = getSharedPreferences("datos-paciente", MODE_PRIVATE)
+
+                                with(shared.edit()){
+                                    putString("id", usuarioID)
+                                    commit()
+                                }
+                            }
+                        }
+                    }
+
+                    else{
+                        Toast.makeText(this, "Ese correo ya ha sido utilizado", Toast.LENGTH_LONG).show()
+                    }
+                }
             }
         }
     }
