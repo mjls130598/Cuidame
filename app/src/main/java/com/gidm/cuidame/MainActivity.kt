@@ -2,7 +2,7 @@ package com.gidm.cuidame
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -23,11 +23,25 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Obtenemos los distintos botones del menú
-        val perfil = findViewById<ImageView>(R.id.sanitarios)
+        val perfil = findViewById<LinearLayout>(R.id.perfil)
+        val logout = findViewById<LinearLayout>(R.id.logout)
 
-        // Si clickea sobre "Account Circle"
+        // Si clickea sobre "Perfil"
         perfil.setOnClickListener {
             cambiarActividad(PerfilActivity::class.java)
+        }
+
+        // Si clickea sobre "Salir"
+        logout.setOnClickListener{
+
+            // Se elimina los datos de la memoria local
+            with(shared.edit()){
+                remove("id")
+                commit()
+            }
+
+            cambiarActividad(IniciarSesionActivity::class.java)
+            finish()
         }
     }
 
