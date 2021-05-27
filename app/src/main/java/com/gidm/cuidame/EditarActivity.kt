@@ -33,10 +33,9 @@ class EditarActivity : AppCompatActivity() {
         val dbUsuario = FirebaseDatabase.getInstance().reference.child("Usuarios").child(id!!)
 
         // Recogemos los valores guardados en las BBDD y los pintamos
-        var nombreAntiguo = ""
         dbUsuario.child("nombre").addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                nombreAntiguo = dataSnapshot.getValue(String::class.java)!!
+                val nombreAntiguo = dataSnapshot.getValue(String::class.java)!!
                 nombreInput.setText(nombreAntiguo)
             }
 
