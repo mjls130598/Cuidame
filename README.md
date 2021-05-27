@@ -4,4 +4,6 @@ Práctica en Android Studio para la asignatura de Gestión de Información en Di
 
 Realizado por la alumna María Jesús López Salmerón.
 
-Esta aplicación es únicamente para aquellos usuarios que vayan a ser los "pacientes" del sistema.
+Esta aplicación es únicamente para aquellos usuarios que vayan a ser los _"pacientes"_ del sistema.
+
+La aplicación correspondiente a los _"sanitarios"_ del sistema se encuentra en el repositorio [Cuidame-Sanitario](https://github.com/mjls130598/Cuidame-Sanitario).
