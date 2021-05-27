@@ -1,7 +1,9 @@
 package com.gidm.cuidame
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import com.google.firebase.auth.FirebaseAuth
@@ -30,20 +32,18 @@ class EditarActivity : AppCompatActivity() {
         val auth = FirebaseAuth.getInstance()
         val dbUsuario = FirebaseDatabase.getInstance().reference.child("Usuarios").child(id!!)
 
-        // Recogemos los valores guardados en las BBDD
+        // Recogemos los valores guardados en las BBDD y los pintamos
         var nombreAntiguo = ""
         dbUsuario.child("nombre").addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 nombreAntiguo = dataSnapshot.getValue(String::class.java)!!
+                nombreInput.setText(nombreAntiguo)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {}
         })
 
         val emailAntiguo = auth.currentUser!!.email
-
-        // Los pintamos por pantalla, cada uno en su correspondiente campo
-        nombreInput.setText(nombreAntiguo)
         emailInput.setText(emailAntiguo)
 
         // Si pulsa sobre "Guardar",...
@@ -58,6 +58,23 @@ class EditarActivity : AppCompatActivity() {
             // Si todo lo introducido es correcto, ...
             if(Utils.comprobarUsuario(nombreNuevo, emailNuevo, contrasenia, contraseniaRepetida, this)){
 
+                // Modificamos el perfil del usuario
+                auth.currentUser!!.updateEmail(emailNuevo).addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d("FIREBASE", "Email actualizado")
+                    }
+                }
+                auth.currentUser!!.updatePassword(contrasenia).addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d("FIREBASE", "Contraseña actualizada")
+                    }
+                }
+                dbUsuario.child("nombre").setValue(nombreNuevo)
+
+                // Nos dirigimos al perfil del usuario
+                val intent = Intent(this, PerfilActivity::class.java)
+                startActivity(intent)
+                finish()
             }
         }
     }

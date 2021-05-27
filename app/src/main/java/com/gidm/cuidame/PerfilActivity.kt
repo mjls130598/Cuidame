@@ -11,18 +11,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 
 
 class PerfilActivity : AppCompatActivity() {
 
     lateinit var dialogFragment: AlertaDialogFragment
-    private val usuario = FirebaseAuth.getInstance().currentUser!!
-    private val datosUsuario = FirebaseDatabase.getInstance().
-    getReference("Usuarios").child(usuario.uid)
+    private lateinit var datosUsuario: DatabaseReference
     private lateinit var shared : SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,15 +25,35 @@ class PerfilActivity : AppCompatActivity() {
         setContentView(R.layout.activity_perfil)
 
         // Recogemos los elementos de la pantalla
-        val nombre = findViewById<TextView>(R.id.nombre)
-        val email = findViewById<TextView>(R.id.email)
         val editar = findViewById<Button>(R.id.editar)
         val borrar = findViewById<Button>(R.id.borrar)
 
+        // Si se clickea sobre "Editar cuenta", ...
+        editar.setOnClickListener{
+            val intent = Intent(this, EditarActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        // Si se clickea sobre "Borrar cuenta", ...
+        borrar.setOnClickListener{
+            // Mostrar el diálogo de confirmación
+            dialogFragment = AlertaDialogFragment.newInstance()
+            dialogFragment!!.show(supportFragmentManager, "Alerta")
+        }
+    }
+
+    override fun onStart() {
+
+        val nombre = findViewById<TextView>(R.id.nombre)
+        val email = findViewById<TextView>(R.id.email)
         shared = getSharedPreferences("datos-paciente", MODE_PRIVATE)
 
         // Obtenemos el id del usuario
         val id = shared.getString("id", null)
+        val usuario = FirebaseAuth.getInstance().currentUser!!
+        datosUsuario = FirebaseDatabase.getInstance().
+        getReference("Usuarios").child(usuario.uid)
 
         if (id != null){
             // Accedemos a los datos del usuario
@@ -57,18 +72,7 @@ class PerfilActivity : AppCompatActivity() {
             }
         }
 
-        // Si se clickea sobre "Editar cuenta", ...
-        editar.setOnClickListener{
-            val intent = Intent(this, EditarActivity::class.java)
-            startActivity(intent)
-        }
-
-        // Si se clickea sobre "Borrar cuenta", ...
-        borrar.setOnClickListener{
-            // Mostrar el diálogo de confirmación
-            dialogFragment = AlertaDialogFragment.newInstance()
-            dialogFragment!!.show(supportFragmentManager, "Alerta")
-        }
+        super.onStart()
     }
 
     fun continuarCierre(continuar: Boolean) {
@@ -78,7 +82,7 @@ class PerfilActivity : AppCompatActivity() {
             datosUsuario.removeValue()
 
             // Se borra la autenticación
-            usuario.delete().addOnCompleteListener{
+            FirebaseAuth.getInstance().currentUser!!.delete().addOnCompleteListener{
                 // Si se ha borrado correctamente
                 if(it.isSuccessful){
                     // Borramos el id de la memoria local
