@@ -45,7 +45,7 @@ class PerfilActivity : AppCompatActivity() {
 
     override fun onStart() {
 
-        val nombre = findViewById<TextView>(R.id.nombre)
+        val nombre = findViewById<TextView>(R.id.especialidadSanitario)
         val email = findViewById<TextView>(R.id.email)
         shared = getSharedPreferences("datos-paciente", MODE_PRIVATE)
 
