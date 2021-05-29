@@ -14,4 +14,5 @@
     <string name="logout">Salir</string>
     <string name="editar">Editar cuenta</string>
     <string name="borrar">Borrar cuenta</string>
+    <string name="seleccionar_sanitario">Seleccione al que desee añadir</string>
 </resources>
