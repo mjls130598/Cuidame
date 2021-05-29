@@ -4,8 +4,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.gidm.cuidame.R
+import com.google.firebase.database.FirebaseDatabase
 
 class RecyclerAdapter(private val sanitarios: ArrayList<Sanitario>):
     RecyclerView.Adapter<RecyclerAdapter.SanitarioHolder>() {
@@ -34,9 +36,19 @@ class RecyclerAdapter(private val sanitarios: ArrayList<Sanitario>):
         }
         override fun onClick(p0: View?) {
             val context = p0!!.context
-            val id = sanitario!!.uid
+            val idSanitario = sanitario!!.uid
 
-            Toast.makeText(context, "Se ha añadido ${sanitario!!.nombre}", Toast.LENGTH_LONG).show()
+            // Añadimos al nuevo sanitario en la base de datos
+            val shared = context.getSharedPreferences("datos-paciente", AppCompatActivity.MODE_PRIVATE)
+            val idUsuario = shared.getString("id", "")
+
+            val dbUsuario = FirebaseDatabase.getInstance().reference.child("Usuarios").child(idUsuario!!)
+
+            dbUsuario.child("sanitarios").setValue(idSanitario).addOnCompleteListener {
+                if(it.isSuccessful)
+                // Informamos al usuario
+                    Toast.makeText(context, "Se ha añadido ${sanitario!!.nombre}", Toast.LENGTH_LONG).show()
+            }
         }
 
         fun bindContacto(sanitario: Sanitario) {

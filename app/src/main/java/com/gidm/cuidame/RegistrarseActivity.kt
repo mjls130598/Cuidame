@@ -55,6 +55,7 @@ class RegistrarseActivity : AppCompatActivity() {
                         // El ID del usuario creado y su nombre
                         val campos = HashMap<String, String>()
                         campos["nombre"] = nombre
+                        campos["sanitarios"] = ""
 
                         // Se guarda los datos anteriores
                         referencia.setValue(campos).addOnCompleteListener{ it2 ->
