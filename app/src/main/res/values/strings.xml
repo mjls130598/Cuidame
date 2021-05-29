@@ -9,7 +9,7 @@
     <string name="correo">Email</string>
     <string name="perfil">Perfil</string>
     <string name="chats">Chats</string>
-    <string name="sanitarios">Tus sanitarios</string>
+    <string name="sanitarios">Mis sanitarios</string>
     <string name="añadir_sanitarios">Nuevo sanitario</string>
     <string name="logout">Salir</string>
     <string name="editar">Editar cuenta</string>

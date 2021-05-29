@@ -2,10 +2,9 @@ package com.gidm.cuidame
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.gidm.cuidame.adapter.RecyclerAdapter
+import com.gidm.cuidame.adapter.NuevosSanitariosAdapter
 import com.gidm.cuidame.adapter.Sanitario
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -18,13 +17,13 @@ class NuevoSanitarioActivity : AppCompatActivity() {
     private lateinit var linearLayoutManager: LinearLayoutManager
 
     // El adaptador de la lista
-    private lateinit var adapter: RecyclerAdapter
+    private lateinit var adapter: NuevosSanitariosAdapter
 
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_nuevo_sanitario)
+        setContentView(R.layout.activity_sanitarios)
 
         // Elementos de la vista
         recyclerView = findViewById<RecyclerView>(R.id.sanitarios)
@@ -46,7 +45,7 @@ class NuevoSanitarioActivity : AppCompatActivity() {
         // Obtenemos el id del usuario
         val id = shared.getString("id", "")
 
-        // Se obtienen los contactos guardados
+        // Se obtienen los sanitarios registrados
         dbUsuario.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 val sanitarios = ArrayList<Sanitario>()
@@ -64,7 +63,7 @@ class NuevoSanitarioActivity : AppCompatActivity() {
                     }
                 }
 
-                adapter = RecyclerAdapter(sanitarios)
+                adapter = NuevosSanitariosAdapter(sanitarios)
                 recyclerView.adapter =adapter
             }
 

@@ -10,8 +10,8 @@ import com.gidm.cuidame.R
 import com.google.firebase.database.FirebaseDatabase
 import kotlin.collections.ArrayList
 
-class RecyclerAdapter(private val sanitarios: ArrayList<Sanitario>):
-    RecyclerView.Adapter<RecyclerAdapter.SanitarioHolder>() {
+class NuevosSanitariosAdapter(private val sanitarios: ArrayList<Sanitario>):
+    RecyclerView.Adapter<NuevosSanitariosAdapter.SanitarioHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
