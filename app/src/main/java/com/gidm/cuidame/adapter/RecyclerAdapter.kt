@@ -40,11 +40,12 @@ class RecyclerAdapter(private val sanitarios: ArrayList<Sanitario>):
             val context = p0!!.context
             val idSanitario = sanitario!!.uid
 
-            // Añadimos al nuevo sanitario en la base de datos
+            // Añadimos al nuevo sanitario y paciente (correspondientes) en la base de datos
             val shared = context.getSharedPreferences("datos-paciente", AppCompatActivity.MODE_PRIVATE)
             val idUsuario = shared.getString("id", "")
 
-            val dbUsuario = FirebaseDatabase.getInstance().reference.child("Usuarios").child(idUsuario!!)
+            val db = FirebaseDatabase.getInstance().reference.child("Usuarios")
+            val dbUsuario = db.child(idUsuario!!)
             val nuevoSanitario = dbUsuario.child("sanitarios").push()
 
             nuevoSanitario.setValue(idSanitario).addOnCompleteListener {
@@ -52,6 +53,10 @@ class RecyclerAdapter(private val sanitarios: ArrayList<Sanitario>):
                 // Informamos al usuario
                     Toast.makeText(context, "Se ha añadido ${sanitario!!.nombre}", Toast.LENGTH_LONG).show()
             }
+
+            val dbSanitario = db.child(idSanitario)
+            val nuevoPaciente = dbSanitario.child("pacientes").push()
+            nuevoPaciente.setValue(idUsuario)
         }
 
         fun bindSanitario(sanitario: Sanitario) {
