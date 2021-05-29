@@ -2,6 +2,7 @@ package com.gidm.cuidame
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gidm.cuidame.adapter.RecyclerAdapter
@@ -41,18 +42,29 @@ class NuevoSanitarioActivity : AppCompatActivity() {
 
         val dbUsuario = FirebaseDatabase.getInstance().reference.child("Usuarios")
 
+        val shared = getSharedPreferences("datos-paciente", MODE_PRIVATE)
+        // Obtenemos el id del usuario
+        val id = shared.getString("id", "")
+
         // Se obtienen los contactos guardados
         dbUsuario.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 val sanitarios = ArrayList<Sanitario>()
+                val usuarioActual = snapshot.child(id!!)
+
+                val sanitariosUsuario = usuarioActual.child("sanitarios").value as ArrayList<*>
+
+                Toast.makeText(this@NuevoSanitarioActivity, sanitariosUsuario.toString(), Toast.LENGTH_LONG).show()
+
                 for(usuario in snapshot.children){
-                    if(usuario.hasChild("especialidad")){
+                    if(usuario.hasChild("especialidad") and
+                            !sanitariosUsuario.contains(usuario.key as String)){
                         sanitarios.add(Sanitario(usuario.child("nombre").value as String,
                         usuario.key as String, usuario.child("especialidad").value as String))
                     }
                 }
 
-                val adapter = RecyclerAdapter(sanitarios)
+                adapter = RecyclerAdapter(sanitarios)
                 recyclerView.adapter =adapter
             }
 

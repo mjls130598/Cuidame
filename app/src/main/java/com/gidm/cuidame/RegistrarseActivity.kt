@@ -53,9 +53,9 @@ class RegistrarseActivity : AppCompatActivity() {
                         val referencia = db.getReference("Usuarios").child(usuarioID)
 
                         // El ID del usuario creado y su nombre
-                        val campos = HashMap<String, String>()
+                        val campos = HashMap<String, Any>()
                         campos["nombre"] = nombre
-                        campos["sanitarios"] = ""
+                        campos["sanitarios"] = ArrayList<String>()
 
                         // Se guarda los datos anteriores
                         referencia.setValue(campos).addOnCompleteListener{ it2 ->
