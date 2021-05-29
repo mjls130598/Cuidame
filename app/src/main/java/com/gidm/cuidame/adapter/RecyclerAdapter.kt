@@ -16,13 +16,13 @@ class RecyclerAdapter(private val sanitarios: ArrayList<Sanitario>):
         parent: ViewGroup,
         viewType: Int
     ): SanitarioHolder {
-        val inflatedView = parent.inflate(R.layout.recyclerview_sanitarios, false)
+        val inflatedView = parent.inflate(R.layout.recyclerview_item_sanitario, false)
         return SanitarioHolder(inflatedView)
     }
 
     override fun onBindViewHolder(holder: SanitarioHolder, position: Int) {
-        val itemContacto = sanitarios[position]
-        holder.bindContacto(itemContacto)
+        val itemSanitario = sanitarios[position]
+        holder.bindSanitario(itemSanitario)
     }
 
     override fun getItemCount(): Int = sanitarios.size
@@ -35,6 +35,7 @@ class RecyclerAdapter(private val sanitarios: ArrayList<Sanitario>):
         init {
             view.setOnClickListener(this)
         }
+
         override fun onClick(p0: View?) {
             val context = p0!!.context
             val idSanitario = sanitario!!.uid
@@ -44,25 +45,21 @@ class RecyclerAdapter(private val sanitarios: ArrayList<Sanitario>):
             val idUsuario = shared.getString("id", "")
 
             val dbUsuario = FirebaseDatabase.getInstance().reference.child("Usuarios").child(idUsuario!!)
+            val nuevoSanitario = dbUsuario.child("sanitarios").push()
 
-            dbUsuario.child("sanitarios").setValue(ArrayList<String>(listOf(idSanitario))).addOnCompleteListener {
+            nuevoSanitario.setValue(idSanitario).addOnCompleteListener {
                 if(it.isSuccessful)
                 // Informamos al usuario
                     Toast.makeText(context, "Se ha añadido ${sanitario!!.nombre}", Toast.LENGTH_LONG).show()
             }
         }
 
-        fun bindContacto(sanitario: Sanitario) {
+        fun bindSanitario(sanitario: Sanitario) {
             this.sanitario = sanitario
             val nombre = view.findViewById<TextView>(R.id.nombreSanitario)
             val especialidad = view.findViewById<TextView>(R.id.especialidadSanitario)
             nombre.text = sanitario.nombre
             especialidad.text = sanitario.especialidad
-        }
-
-
-        companion object {
-            private val SANITARIO_KEY = "SANITARIO"
         }
 
     }

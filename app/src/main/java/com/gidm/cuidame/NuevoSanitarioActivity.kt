@@ -52,13 +52,13 @@ class NuevoSanitarioActivity : AppCompatActivity() {
                 val sanitarios = ArrayList<Sanitario>()
                 val usuarioActual = snapshot.child(id!!)
 
-                val sanitariosUsuario = usuarioActual.child("sanitarios").value as ArrayList<*>
-
-                Toast.makeText(this@NuevoSanitarioActivity, sanitariosUsuario.toString(), Toast.LENGTH_LONG).show()
+                val sanitariosUsuario = if(usuarioActual.child("sanitarios").value != null){
+                    usuarioActual.child("sanitarios").value as HashMap<String, String>
+                } else HashMap<String, String>()
 
                 for(usuario in snapshot.children){
                     if(usuario.hasChild("especialidad") and
-                            !sanitariosUsuario.contains(usuario.key as String)){
+                            !sanitariosUsuario.containsValue(usuario.key as String)){
                         sanitarios.add(Sanitario(usuario.child("nombre").value as String,
                         usuario.key as String, usuario.child("especialidad").value as String))
                     }
