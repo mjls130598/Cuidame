@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.gidm.cuidame.R
 import com.google.firebase.database.FirebaseDatabase
+import kotlin.collections.ArrayList
 
 class RecyclerAdapter(private val sanitarios: ArrayList<Sanitario>):
     RecyclerView.Adapter<RecyclerAdapter.SanitarioHolder>() {
@@ -44,7 +45,7 @@ class RecyclerAdapter(private val sanitarios: ArrayList<Sanitario>):
 
             val dbUsuario = FirebaseDatabase.getInstance().reference.child("Usuarios").child(idUsuario!!)
 
-            dbUsuario.child("sanitarios").setValue(idSanitario).addOnCompleteListener {
+            dbUsuario.child("sanitarios").setValue(ArrayList<String>(listOf(idSanitario))).addOnCompleteListener {
                 if(it.isSuccessful)
                 // Informamos al usuario
                     Toast.makeText(context, "Se ha añadido ${sanitario!!.nombre}", Toast.LENGTH_LONG).show()
