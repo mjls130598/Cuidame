@@ -108,6 +108,7 @@ class ChatActivity : AppCompatActivity() {
 
         // Se indica el modo de organización de la lista
         linearLayoutManager = LinearLayoutManager(this)
+        linearLayoutManager.stackFromEnd = true
         recyclerView.layoutManager = linearLayoutManager
 
         // Obtenemos las conversaciones anteriores
