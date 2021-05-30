@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         val logout = findViewById<LinearLayout>(R.id.logout)
         val nuevoSanitario = findViewById<LinearLayout>(R.id.añadirSanitarios)
         val misSanitarios = findViewById<LinearLayout>(R.id.sanitarios)
+        val chats = findViewById<LinearLayout>(R.id.chats)
 
         // Si clickea sobre "Perfil"
         perfil.setOnClickListener {
@@ -58,6 +59,11 @@ class MainActivity : AppCompatActivity() {
         // Si se pulsa sobre "Mis sanitarios"
         misSanitarios.setOnClickListener {
             cambiarActividad(MisSanitariosActivity::class.java)
+        }
+
+        // Si pulsa sobre "Chats"
+        chats.setOnClickListener {
+            cambiarActividad(ChatsActivity::class.java)
         }
     }
 
