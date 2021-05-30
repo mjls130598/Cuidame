@@ -12,6 +12,7 @@ import kotlin.collections.ArrayList
 
 class NuevosSanitariosAdapter(private val sanitarios: ArrayList<Sanitario>):
     RecyclerView.Adapter<NuevosSanitariosAdapter.SanitarioHolder>() {
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int

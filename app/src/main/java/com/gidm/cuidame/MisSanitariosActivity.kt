@@ -47,6 +47,7 @@ class MisSanitariosActivity : AppCompatActivity() {
         // Se obtienen los sanitarios guardados
         dbUsuario.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+
                 val sanitarios = ArrayList<Sanitario>()
                 val usuarioActual = snapshot.child(id!!)
 
@@ -67,5 +68,6 @@ class MisSanitariosActivity : AppCompatActivity() {
             override fun onCancelled(error: DatabaseError) {}
 
         })
+
     }
 }

@@ -5,16 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.gidm.cuidame.ChatActivity
 import com.gidm.cuidame.R
-import com.google.firebase.database.FirebaseDatabase
 import kotlin.collections.ArrayList
 
 class MisSanitariosAdapter(private val sanitarios: ArrayList<Sanitario>):
     RecyclerView.Adapter<MisSanitariosAdapter.SanitarioHolder>() {
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
