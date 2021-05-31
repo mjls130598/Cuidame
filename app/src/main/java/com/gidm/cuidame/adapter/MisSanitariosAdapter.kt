@@ -1,5 +1,6 @@
 package com.gidm.cuidame.adapter
 
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.gidm.cuidame.ChatActivity
 import com.gidm.cuidame.R
+import com.gidm.cuidame.Utils
 import kotlin.collections.ArrayList
 
 class MisSanitariosAdapter(private val sanitarios: ArrayList<Sanitario>):
@@ -52,6 +54,13 @@ class MisSanitariosAdapter(private val sanitarios: ArrayList<Sanitario>):
                 val intent = Intent(view.context, ChatActivity::class.java)
                 intent.putExtra("idSanitario", sanitario.uid)
                 view.context.startActivity(intent)
+            }
+
+            // Si clickea sobre la basura, ...
+            val borrar = view.findViewById<ImageView>(R.id.borrarSanitario)
+            val id = view.context.getSharedPreferences("datos-paciente", MODE_PRIVATE).getString("id", "")!!
+            borrar.setOnClickListener{
+                Utils.borrarSanitario(sanitario.uid, id)
             }
         }
 

@@ -1,7 +1,12 @@
 package com.gidm.cuidame
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 object Utils {
     fun comprobarUsuario(nombre: String, correo: String, contrasenia1: String,
@@ -21,5 +26,64 @@ object Utils {
         }
 
         return correcto
+    }
+
+    fun borrarSanitario(idSanitario: String, idPaciente: String){
+
+        val db = FirebaseDatabase.getInstance().reference
+
+        // Los chats con él
+        val idConversacion = db.child("Usuarios").child(idSanitario).
+        child("chats").child(idPaciente)
+
+        idConversacion.addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+
+                val id = snapshot.value.toString()
+                db.child("Chats").child(id).removeValue()
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
+
+        idConversacion.removeValue()
+        db.child("Usuarios").child(idPaciente).child("chats").child(idSanitario).removeValue()
+
+        val dbUsuarios = db.child("Usuarios")
+        dbUsuarios.addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+
+                // Dentro de su cuenta
+                val sanitariosSnapshot = snapshot.child(idPaciente).
+                child("sanitarios").value
+
+                val sanitarios = if (sanitariosSnapshot != null) {
+                    sanitariosSnapshot as HashMap<String, String>
+                } else HashMap()
+
+                val idUsuarioSanitario = sanitarios.filterValues{it == idSanitario}.keys
+
+                if(idUsuarioSanitario.isNotEmpty())
+                    dbUsuarios.child(idPaciente).child("sanitarios").
+                        child(idUsuarioSanitario.first()).removeValue()
+
+                // Dentro de la cuenta del sanitario
+                val pacientesSnapshot = snapshot.child(idSanitario).
+                child("pacientes").value
+
+                val pacientes = if (pacientesSnapshot != null) {
+                    pacientesSnapshot as HashMap<String, String>
+                } else HashMap()
+
+                val idSanitarioPaciente = pacientes.filterValues{it == idPaciente}.keys
+                if(idSanitarioPaciente.isNotEmpty())
+                    dbUsuarios.child(idSanitario).child("pacientes").
+                        child(idSanitarioPaciente.first()).removeValue()
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+
+        })
     }
 }

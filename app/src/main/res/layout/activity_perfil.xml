@@ -32,7 +32,7 @@
             android:layout_height="34dp" />
 
         <TextView
-            android:id="@+id/especialidadSanitario"
+            android:id="@+id/nombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/nombre"
