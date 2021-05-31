@@ -66,7 +66,9 @@ class ChatAdapter(private val mensajes: ArrayList<Chat>, private val usuarioID: 
         val fecha = view.findViewById<TextView>(R.id.fecha)
 
         mensaje.text = chat.mensaje
-        hora.text = "${chat.fecha.hours} : ${chat.fecha.minutes}"
+        val minutos = if (chat.fecha.minutes < 10) "0${chat.fecha.minutes}"
+            else chat.fecha.minutes.toString()
+        hora.text = "${chat.fecha.hours} : $minutos"
         val fechaChat = "${chat.fecha.date} ${mes(chat.fecha.month)}"
         fecha.text = fechaChat
 
